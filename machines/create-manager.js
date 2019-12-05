@@ -32,7 +32,6 @@ module.exports = {
       description: 'A connection string to use to connect to a Postgresql database.',
       extendedDescription: 'Be sure to include credentials. You can also optionally provide the name of an existing database on your Postgresql server.',
       example: 'postgres://mikermcneil:p4ssw02D@localhost:5432/some_db',
-      required: true
     },
 
     onUnexpectedFailure: {
@@ -195,9 +194,7 @@ module.exports = {
 
     // Validate & parse connection string, pulling out Postgres client config
     // (call `malformed` if invalid).
-    //
-    // Remember: connection string takes priority over `meta` in the event of a conflict.
-    try {
+    if(inputs.connectionString !== undefined) try {
       var urlToParse = inputs.connectionString;
       // We don't actually care about the protocol, but `url.parse()` returns funky results
       // if the argument doesn't have one.  So we'll add one if necessary.

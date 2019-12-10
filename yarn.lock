@@ -1901,7 +1901,7 @@ validator@5.7.0:
   resolved "https://registry.yarnpkg.com/validator/-/validator-5.7.0.tgz#7a87a58146b695ac486071141c0c49d67da05e5c"
   integrity sha1-eoelgUa2laxIYHEUHAxJ1n2gXlw=
 
-waterline-sql-builder@^1.0.0-6:
+waterline-sql-builder@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/waterline-sql-builder/-/waterline-sql-builder-1.0.0.tgz#4bd98819bd37f5ab1df0555366e955ff56eeb8a5"
   integrity sha512-2oWLfAV5dpJHcUC3+wHoE4wjilks4kp6h0AtlgEvn3Wl8pac1MvPJmZqwRyJH2prakGfhxE+E5yBXaMQfOnUrQ==

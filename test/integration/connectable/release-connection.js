@@ -44,13 +44,10 @@ describe('Connectable ::', function() {
           return done(err);
         }
 
-        // If the connection was successfully released the poolSize and the
-        // availableObjectsCount should be equal.
-        // https://github.com/coopernurse/node-pool#pool-info
-        //
-        // It's a little bit like inception here digging into manager.manager.pool.pool
-        var poolSize = manager.pool.pool.getPoolSize();
-        var availableObjects = manager.pool.pool.availableObjectsCount();
+        // If the connection was successfully released the idleCount and the
+        // totalCount should be equal.
+        var poolSize = manager.pool.totalCount;
+        var availableObjects = manager.pool.idleCount;
 
         assert.equal(poolSize, availableObjects);
 

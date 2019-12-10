@@ -8,6 +8,7 @@
     "pretest": "npm run lint",
     "lint": "node ./node_modules/eslint/bin/eslint *.js **/*.js",
     "docker": "docker-compose run adapter bash",
+    "docker:test": "(docker-compose build adapter && docker-compose up --no-start postgres && docker-compose start postgres && sleep 5 && docker-compose run adapter yarn test); docker-compose down",
     "benchmark": "node ./node_modules/mocha/bin/mocha test/benchmarks --recursive"
   },
   "keywords": [

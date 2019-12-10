@@ -1,4 +1,4 @@
-var _ = require('@sailshq/lodash');
+var _ = require('lodash');
 var debug = require('debug')('query');
 
 module.exports = {

@@ -194,7 +194,7 @@ module.exports = {
 
     // Validate & parse connection string, pulling out Postgres client config
     // (call `malformed` if invalid).
-    if(inputs.connectionString !== undefined) try {
+    if(inputs.connectionString !== undefined) { try {
       var urlToParse = inputs.connectionString;
       // We don't actually care about the protocol, but `url.parse()` returns funky results
       // if the argument doesn't have one.  So we'll add one if necessary.
@@ -250,7 +250,7 @@ module.exports = {
         error: _e,
         meta: inputs.meta
       });
-    }
+    } }
 
     // Create a connection pool.
     //

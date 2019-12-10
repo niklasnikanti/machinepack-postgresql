@@ -24,7 +24,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "lodash": "^4.17.15",
-    "machine": "^15.0.0-21",
+    "machine": "^15.2.2",
     "pg": "6.1.6",
     "waterline-sql-builder": "^1.0.0-6"
   },

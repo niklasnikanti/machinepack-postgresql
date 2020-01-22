@@ -29,7 +29,7 @@ describe('Connectable ::', function() {
         assert(report.manager.pool);
 
         // Assert that a PG Pool is returned
-        //assert(report.manager.pool instanceof pg.Pool); <-- no longer true; possibly related to https://github.com/brianc/node-postgres/issues/1612
+        //assert(report.manager.pool instanceof pg.Pool); <-- not currently true - see https://github.com/brianc/node-postgres/issues/1612
 
         // Assert that the manager has a connect function
         assert(report.manager.pool.connect);
@@ -51,7 +51,7 @@ describe('Connectable ::', function() {
         assert(report.manager.pool);
 
         // Assert that a PG Pool is returned
-        //assert(report.manager.pool instanceof pg.Pool); <-- no longer true; possibly related to https://github.com/brianc/node-postgres/issues/1612
+        //assert(report.manager.pool instanceof pg.Pool); <-- not currently true - see https://github.com/brianc/node-postgres/issues/1612
 
         // Assert that the manager has a connect function
         assert(report.manager.pool.connect);

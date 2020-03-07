@@ -15,27 +15,27 @@ describe('Queryable ::', function() {
       Pack.createManager({
         connectionString: 'postgres://mp:mp@' + host + ':5432/mppg'
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
-
-        // Store the manager
-        manager = report.manager;
-
-        Pack.getConnection({
-          manager: manager
-        })
         .exec(function(err, report) {
           if (err) {
             return done(err);
           }
 
-          // Store the connection
-          connection = report.connection;
-          return done();
+          // Store the manager
+          manager = report.manager;
+
+          Pack.getConnection({
+            manager: manager
+          })
+            .exec(function(err, report) {
+              if (err) {
+                return done(err);
+              }
+
+              // Store the connection
+              connection = report.connection;
+              return done();
+            });
         });
-      });
     });
 
     // Afterwards release the connection
@@ -50,16 +50,16 @@ describe('Queryable ::', function() {
         connection: connection,
         nativeQuery: 'SELECT datname FROM pg_database WHERE datistemplate = false;'
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
+        .exec(function(err, report) {
+          if (err) {
+            return done(err);
+          }
 
-        assert(_.isArray(report.result.rows));
-        assert(report.result.rows.length);
+          assert(_.isArray(report.result.rows));
+          assert(report.result.rows.length);
 
-        return done();
-      });
+          return done();
+        });
     });
   });
 });

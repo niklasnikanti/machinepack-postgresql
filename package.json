@@ -7,7 +7,7 @@
     "test:docker": "(docker-compose build adapter && docker-compose up --no-start postgres && docker-compose start postgres && sleep 5 && docker-compose run adapter yarn test); docker-compose down",
     "fasttest": "node ./node_modules/mocha/bin/mocha test/integration --recursive",
     "pretest": "npm run lint",
-    "lint": "node ./node_modules/eslint/bin/eslint *.js **/*.js",
+    "lint": "node ./node_modules/eslint/bin/eslint *.js --fix **/*.js",
     "docker": "docker-compose run adapter bash",
     "benchmark": "node ./node_modules/mocha/bin/mocha test/benchmarks --recursive"
   },
@@ -26,7 +26,7 @@
     "lodash": "^4.17.15",
     "machine": "^15.2.2",
     "pg": "^7.17.1",
-    "waterline-sql-builder": "^1.0.0"
+    "waterline-sql-builder": "https://github.com/niklasnikanti/waterline-sql-builder.git"
   },
   "devDependencies": {
     "benchmark": "2.1.1",

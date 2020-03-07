@@ -14,45 +14,45 @@ describe('Connectable ::', function() {
       Pack.createManager({
         connectionString: 'postgres://mp:mp@' + host + ':5432/mppg'
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
-
-        manager = report.manager;
-
-        Pack.getConnection({
-          manager: manager
-        })
         .exec(function(err, report) {
           if (err) {
             return done(err);
           }
 
-          connection = report.connection;
-          return done();
+          manager = report.manager;
+
+          Pack.getConnection({
+            manager: manager
+          })
+            .exec(function(err, report) {
+              if (err) {
+                return done(err);
+              }
+
+              connection = report.connection;
+              return done();
+            });
         });
-      });
     });
 
     it('should successfully release a connection', function(done) {
       Pack.releaseConnection({
         connection: connection
       })
-      .exec(function(err) {
-        if (err) {
-          return done(err);
-        }
+        .exec(function(err) {
+          if (err) {
+            return done(err);
+          }
 
-        // If the connection was successfully released the idleCount and the
-        // totalCount should be equal.
-        var poolSize = manager.pool.totalCount;
-        var availableObjects = manager.pool.idleCount;
+          // If the connection was successfully released the idleCount and the
+          // totalCount should be equal.
+          var poolSize = manager.pool.totalCount;
+          var availableObjects = manager.pool.idleCount;
 
-        assert.equal(poolSize, availableObjects);
+          assert.equal(poolSize, availableObjects);
 
-        return done();
-      });
+          return done();
+        });
     });
   });
 });

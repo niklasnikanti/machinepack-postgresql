@@ -10,14 +10,14 @@ describe('Connectable ::', function() {
       Pack.createManager({
         connectionString: 'postgres://mp:mp@localhost:5432/mppg'
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
+        .exec(function(err, report) {
+          if (err) {
+            return done(err);
+          }
 
-        manager = report.manager;
-        return done();
-      });
+          manager = report.manager;
+          return done();
+        });
     });
 
 
@@ -25,10 +25,10 @@ describe('Connectable ::', function() {
       Pack.destroyManager({
         manager: manager
       })
-      .exec(function(err) {
-        assert(!err);
-        return done();
-      });
+        .exec(function(err) {
+          assert(!err);
+          return done();
+        });
     });
   });
 });

@@ -10,14 +10,14 @@ describe('Queryable ::', function() {
           from: 'books'
         }
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
+        .exec(function(err, report) {
+          if (err) {
+            return done(err);
+          }
 
-        assert.equal(report.nativeQuery, 'select "title", "author", "year" from "books"');
-        return done();
-      });
+          assert.equal(report.nativeQuery, 'select "title", "author", "year" from "books"');
+          return done();
+        });
     });
 
     // TODO: Add lots of checking to the statement compiler
@@ -28,11 +28,11 @@ describe('Queryable ::', function() {
           from: 'books'
         }
       })
-      .exec(function(err) {
-        assert(err);
-        assert.equal(err.exit, 'malformed');
-        return done();
-      });
+        .exec(function(err) {
+          assert(err);
+          assert.equal(err.exit, 'malformed');
+          return done();
+        });
     });
   });
 });

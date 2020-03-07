@@ -15,39 +15,39 @@ describe('Queryable ::', function() {
       Pack.createManager({
         connectionString: 'postgres://mp:mp@' + host + ':5432/mppg'
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
-
-        // Store the manager
-        manager = report.manager;
-
-        Pack.getConnection({
-          manager: manager
-        })
         .exec(function(err, report) {
           if (err) {
             return done(err);
           }
 
-          // Store the connection
-          connection = report.connection;
+          // Store the manager
+          manager = report.manager;
 
-          // Create a table to use for testing
-          Pack.sendNativeQuery({
-            connection: connection,
-            nativeQuery: 'CREATE TABLE IF NOT EXISTS people(name varchar(255) UNIQUE);'
+          Pack.getConnection({
+            manager: manager
           })
-          .exec(function(err) {
-            if (err) {
-              return done(err);
-            }
+            .exec(function(err, report) {
+              if (err) {
+                return done(err);
+              }
 
-            return done();
-          });
+              // Store the connection
+              connection = report.connection;
+
+              // Create a table to use for testing
+              Pack.sendNativeQuery({
+                connection: connection,
+                nativeQuery: 'CREATE TABLE IF NOT EXISTS people(name varchar(255) UNIQUE);'
+              })
+                .exec(function(err) {
+                  if (err) {
+                    return done(err);
+                  }
+
+                  return done();
+                });
+            });
         });
-      });
     });
 
     // Afterwards destroy the test table and release the connection
@@ -56,15 +56,15 @@ describe('Queryable ::', function() {
         connection: connection,
         nativeQuery: 'DROP TABLE people;'
       })
-      .exec(function(err) {
-        if (err) {
-          return done(err);
-        }
+        .exec(function(err) {
+          if (err) {
+            return done(err);
+          }
 
-        Pack.releaseConnection({
-          connection: connection
-        }).exec(done);
-      });
+          Pack.releaseConnection({
+            connection: connection
+          }).exec(done);
+        });
     });
 
     it('should normalize UNIQUE constraint errors', function(done) {
@@ -73,28 +73,28 @@ describe('Queryable ::', function() {
         connection: connection,
         nativeQuery: 'INSERT INTO "people" VALUES (\'Batman\'), (\'Batman\');'
       })
-      .exec(function(err) {
-        assert(err);
-        assert.equal(err.exit, 'queryFailed');
+        .exec(function(err) {
+          assert(err);
+          assert.equal(err.exit, 'queryFailed');
 
-        Pack.parseNativeQueryError({
-          nativeQueryError: err.raw.error
-        })
-        .exec(function(err, report) {
-          if (err) {
-            return done(err);
-          }
+          Pack.parseNativeQueryError({
+            nativeQueryError: err.raw.error
+          })
+            .exec(function(err, report) {
+              if (err) {
+                return done(err);
+              }
 
-          assert(report.footprint);
-          assert(report.footprint.identity);
-          assert.equal(report.footprint.identity, 'notUnique');
-          assert(_.isArray(report.footprint.keys));
-          assert.equal(report.footprint.keys.length, 1);
-          assert.equal(_.first(report.footprint.keys), 'name');
+              assert(report.footprint);
+              assert(report.footprint.identity);
+              assert.equal(report.footprint.identity, 'notUnique');
+              assert(_.isArray(report.footprint.keys));
+              assert.equal(report.footprint.keys.length, 1);
+              assert.equal(_.first(report.footprint.keys), 'name');
 
-          return done();
+              return done();
+            });
         });
-      });
     });
   });
 });

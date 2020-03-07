@@ -1,3 +1,4 @@
+/*eslint no-unused-vars: ["error", { "varsIgnorePattern": "pg" }]*/
 var assert = require('assert');
 var pg = require('pg');
 var Pack = require('../../../');
@@ -8,56 +9,56 @@ describe('Connectable ::', function() {
       Pack.createManager({
         connectionString: 'localhost:5432/mppg'
       })
-      .exec(function(err) {
-        if (err) {
-          return done(err);
-        }
-        return done();
-      });
+        .exec(function(err) {
+          if (err) {
+            return done(err);
+          }
+          return done();
+        });
     });
 
     it('should successfully return a PG Pool instance (using postgres:// protocol)', function(done) {
       Pack.createManager({
         connectionString: 'postgres://mp:mp@localhost:5432/mppg'
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
+        .exec(function(err, report) {
+          if (err) {
+            return done(err);
+          }
 
-        // Assert that the manager has a pool object
-        assert(report.manager.pool);
+          // Assert that the manager has a pool object
+          assert(report.manager.pool);
 
-        // Assert that a PG Pool is returned
-        //assert(report.manager.pool instanceof pg.Pool); <-- not currently true - see https://github.com/brianc/node-postgres/issues/1612
+          // Assert that a PG Pool is returned
+          //assert(report.manager.pool instanceof pg.Pool); <-- not currently true - see https://github.com/brianc/node-postgres/issues/1612
 
-        // Assert that the manager has a connect function
-        assert(report.manager.pool.connect);
+          // Assert that the manager has a connect function
+          assert(report.manager.pool.connect);
 
-        return done();
-      });
+          return done();
+        });
     });
 
     it('should successfully return a PG Pool instance (using postgresql:// protocol)', function(done) {
       Pack.createManager({
         connectionString: 'postgresql://mp:mp@localhost:5432/mppg'
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
+        .exec(function(err, report) {
+          if (err) {
+            return done(err);
+          }
 
-        // Assert that the manager has a pool object
-        assert(report.manager.pool);
+          // Assert that the manager has a pool object
+          assert(report.manager.pool);
 
-        // Assert that a PG Pool is returned
-        //assert(report.manager.pool instanceof pg.Pool); <-- not currently true - see https://github.com/brianc/node-postgres/issues/1612
+          // Assert that a PG Pool is returned
+          //assert(report.manager.pool instanceof pg.Pool); <-- not currently true - see https://github.com/brianc/node-postgres/issues/1612
 
-        // Assert that the manager has a connect function
-        assert(report.manager.pool.connect);
+          // Assert that the manager has a connect function
+          assert(report.manager.pool.connect);
 
-        return done();
-      });
+          return done();
+        });
     });
   });
 });

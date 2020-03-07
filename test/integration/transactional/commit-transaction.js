@@ -15,51 +15,51 @@ describe('Transactional ::', function() {
       Pack.createManager({
         connectionString: 'postgres://mp:mp@' + host + ':5432/mppg'
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
-
-        // Store the manager
-        manager = report.manager;
-
-        Pack.getConnection({
-          manager: manager
-        })
         .exec(function(err, report) {
           if (err) {
             return done(err);
           }
 
-          // Store the connection
-          connectionA = report.connection;
+          // Store the manager
+          manager = report.manager;
 
           Pack.getConnection({
             manager: manager
           })
-          .exec(function(err, report) {
-            if (err) {
-              return done(err);
-            }
-
-            // Store the connection
-            connectionB = report.connection;
-
-            // Create a table to use for testing
-            Pack.sendNativeQuery({
-              connection: connectionA,
-              nativeQuery: 'CREATE TABLE IF NOT EXISTS people(id serial primary key, name varchar(255));'
-            })
-            .exec(function(err) {
+            .exec(function(err, report) {
               if (err) {
                 return done(err);
               }
 
-              return done();
+              // Store the connection
+              connectionA = report.connection;
+
+              Pack.getConnection({
+                manager: manager
+              })
+                .exec(function(err, report) {
+                  if (err) {
+                    return done(err);
+                  }
+
+                  // Store the connection
+                  connectionB = report.connection;
+
+                  // Create a table to use for testing
+                  Pack.sendNativeQuery({
+                    connection: connectionA,
+                    nativeQuery: 'CREATE TABLE IF NOT EXISTS people(id serial primary key, name varchar(255));'
+                  })
+                    .exec(function(err) {
+                      if (err) {
+                        return done(err);
+                      }
+
+                      return done();
+                    });
+                });
             });
-          });
         });
-      });
     });
 
     // Afterwards destroy the table and release the connections
@@ -68,24 +68,24 @@ describe('Transactional ::', function() {
         connection: connectionA,
         nativeQuery: 'DROP TABLE people;'
       })
-      .exec(function(err) {
-        if (err) {
-          return done(err);
-        }
-
-        Pack.releaseConnection({
-          connection: connectionA
-        })
         .exec(function(err) {
           if (err) {
             return done(err);
           }
 
           Pack.releaseConnection({
-            connection: connectionB
-          }).exec(done);
+            connection: connectionA
+          })
+            .exec(function(err) {
+              if (err) {
+                return done(err);
+              }
+
+              Pack.releaseConnection({
+                connection: connectionB
+              }).exec(done);
+            });
         });
-      });
     });
 
     // To Test:
@@ -98,62 +98,62 @@ describe('Transactional ::', function() {
       Pack.beginTransaction({
         connection: connectionA
       })
-      .exec(function(err) {
-        if (err) {
-          return done(err);
-        }
-
-        // Insert a record using the transaction
-        Pack.sendNativeQuery({
-          connection: connectionA,
-          nativeQuery: 'INSERT INTO "people" (name) VALUES (\'hugo\') returning "id";'
-        })
         .exec(function(err) {
           if (err) {
             return done(err);
           }
 
-          // Query the table using connection B and ensure the record doesn't exist
+          // Insert a record using the transaction
           Pack.sendNativeQuery({
-            connection: connectionB,
-            nativeQuery: 'SELECT * FROM "people";'
+            connection: connectionA,
+            nativeQuery: 'INSERT INTO "people" (name) VALUES (\'hugo\') returning "id";'
           })
-          .exec(function(err, report) {
-            if (err) {
-              return done(err);
-            }
-
-            // Ensure no results were returned
-            assert.equal(report.result.rowCount, 0);
-
-            // Commit the transaction
-            Pack.commitTransaction({
-              connection: connectionA
-            })
             .exec(function(err) {
               if (err) {
                 return done(err);
               }
 
-              // Query the table using connection B and ensure the record does exist
+              // Query the table using connection B and ensure the record doesn't exist
               Pack.sendNativeQuery({
                 connection: connectionB,
                 nativeQuery: 'SELECT * FROM "people";'
               })
-              .exec(function(err, report) {
-                if (err) {
-                  return done(err);
-                }
+                .exec(function(err, report) {
+                  if (err) {
+                    return done(err);
+                  }
 
-                // Ensure 1 result was returned
-                assert.equal(report.result.rowCount, 1);
+                  // Ensure no results were returned
+                  assert.equal(report.result.rowCount, 0);
 
-                return done();
-              });
+                  // Commit the transaction
+                  Pack.commitTransaction({
+                    connection: connectionA
+                  })
+                    .exec(function(err) {
+                      if (err) {
+                        return done(err);
+                      }
+
+                      // Query the table using connection B and ensure the record does exist
+                      Pack.sendNativeQuery({
+                        connection: connectionB,
+                        nativeQuery: 'SELECT * FROM "people";'
+                      })
+                        .exec(function(err, report) {
+                          if (err) {
+                            return done(err);
+                          }
+
+                          // Ensure 1 result was returned
+                          assert.equal(report.result.rowCount, 1);
+
+                          return done();
+                        });
+                    });
+                });
             });
-          });
         });
-      });
     });
   });
 });

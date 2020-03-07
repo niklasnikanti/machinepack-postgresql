@@ -14,14 +14,14 @@ describe('Connectable ::', function() {
       Pack.createManager({
         connectionString: 'postgres://mp:mp@' + host + ':5432/mppg'
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
+        .exec(function(err, report) {
+          if (err) {
+            return done(err);
+          }
 
-        manager = report.manager;
-        return done();
-      });
+          manager = report.manager;
+          return done();
+        });
     });
 
     after(function(done) {
@@ -32,23 +32,23 @@ describe('Connectable ::', function() {
       Pack.getConnection({
         manager: manager
       })
-      .exec(function(err, report) {
-        if (err) {
-          return done(err);
-        }
+        .exec(function(err, report) {
+          if (err) {
+            return done(err);
+          }
 
-        // Assert that the report has a client object
-        assert(report.connection);
+          // Assert that the report has a client object
+          assert(report.connection);
 
-        // Assert that a PG Client is returned
-        assert(report.connection instanceof pg.Client);
+          // Assert that a PG Client is returned
+          assert(report.connection instanceof pg.Client);
 
-        // Assert that the connection has a release function, and call it to
-        // release the connection.
-        report.connection.release();
+          // Assert that the connection has a release function, and call it to
+          // release the connection.
+          report.connection.release();
 
-        return done();
-      });
+          return done();
+        });
     });
   });
 });
